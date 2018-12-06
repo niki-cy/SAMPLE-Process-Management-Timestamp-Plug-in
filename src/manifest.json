@@ -1,0 +1,38 @@
+{
+  "manifest_version": 1,
+  "version": 1,
+  "type": "APP",
+  "desktop": {
+    "js": [
+      "https://js.cybozu.com/jquery/3.3.1/jquery.min.js",
+      "js/desktop.js"
+    ],
+    "css": [
+      "css/51-modern-default.css",
+      "css/desktop.css",
+      "css/config.css"
+    ]
+  },
+  "icon": "image/clock.png",
+  "config": {
+    "html": "html/config.html",
+    "js": [
+      "https://js.cybozu.com/jquery/3.3.1/jquery.min.js",
+      "js/config.js"
+    ],
+    "css": [
+      "css/51-modern-default.css",
+      "css/config.css"
+    ],
+    "required_params": [
+      "select_datetime_field",
+      "select_status"
+    ]
+  },
+  "name": {
+    "en": "Process Management Timestamp Plug-in"
+  },
+  "description": {
+    "en": "This plug-in inserts the datetime that a record reached a specified Status into a Datetime field."
+  }
+}
