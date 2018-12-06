@@ -17,7 +17,7 @@ jQuery.noConflict();
 
     // Retrieve URL to Process Management Settings page
     function getProcessManagementUrl() {
-        return '/k/admin/app/status?app=' + kappId;
+        return '/k/admin/app/status?app=' + appId;
     };
 
     // Set body for API requests
@@ -28,7 +28,7 @@ jQuery.noConflict();
     // Retrieve Datetime field information, then set drop-down
     function setDatetimeDropdown() {
 
-        return kintone.api(kintone.api.url('/k/v1/app/form/fields', true), 'GET', body, function(resp) {
+        return kintone.api(kintone.api.url('/k/v1/preview/app/form/fields', true), 'GET', body, function(resp) {
         // Success
             var props = resp.properties;
 
@@ -40,10 +40,10 @@ jQuery.noConflict();
                     var $optionDatetime = $('<option>');
                     $optionDatetime.attr('value', field.code);
                     $optionDatetime.text(field.code);
-                    $('#select_datetime_field').append($optionDatetime);
+                    $datetime.append($optionDatetime);
                 };
             };
-            $('#select_datetime_field').val(config.select_datetime_field); 
+            $datetime.val(config.select_datetime_field); 
         }, function(error) {
             // Error
             console.log(error);
@@ -53,7 +53,7 @@ jQuery.noConflict();
 
     // Retrieve Status information, then set drop-down
     function setStatusDropdown() {
-        return kintone.api(kintone.api.url('/k/v1/app/status', true), 'GET', body, function(resp) {
+        return kintone.api(kintone.api.url('/k/v1/preview/app/status', true), 'GET', body, function(resp) {
         // Success
             if (resp.enable === true) {
                 for ( var i = 0; i < resp.actions.length; i++){
@@ -62,9 +62,9 @@ jQuery.noConflict();
                     var $optionStatus = $('<option>');
                     $optionStatus.attr('value', statuses);
                     $optionStatus.text(statuses);
-                    $('#select_status').append($optionStatus);
+                    $status.append($optionStatus);
                 };
-                $('#select_status').val(config.select_status); 
+                $status.val(config.select_status); 
             } else if (resp.enable === false) {
                 // Redirect to Process Management settings if PM is not enabled  
                 alert('Please enable Process Management and then update the App to use this plug-in.');
@@ -84,11 +84,15 @@ jQuery.noConflict();
     // Set input values when form is submitted
     $form.on('submit', function(e) {
         e.preventDefault();
-
-        kintone.plugin.app.setConfig({select_datetime_field: $('#select_datetime_field').val(), select_status: $('#select_status').val()}, function() {
+        kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
             // Redirect to App Settings
             alert('Please update the app!');
             window.location.href = getSettingsUrl();
         });
     });
+    
+    // Set process to run when cancel button is clicked
+    $('#settings-cancel').on('click', function() {
+        history.back();
+    }
 })(jQuery, kintone.$PLUGIN_ID);
