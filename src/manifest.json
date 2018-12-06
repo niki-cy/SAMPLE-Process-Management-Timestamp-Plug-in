@@ -9,7 +9,6 @@
     ],
     "css": [
       "css/51-modern-default.css",
-      "css/desktop.css",
       "css/config.css"
     ]
   },
