@@ -36,7 +36,6 @@ jQuery.noConflict();
                 var field = props[datetimeField];
 
                 if (field.type === 'DATETIME') {
-                    console.log(field.code);
                     var $optionDatetime = $('<option>');
                     $optionDatetime.attr('value', field.code);
                     $optionDatetime.text(field.code);
@@ -57,7 +56,6 @@ jQuery.noConflict();
         // Success
             if (resp.enable === true) {
                 for ( var i = 0; i < resp.actions.length; i++){
-                    console.log(statuses);
                     var statuses = resp.actions[i].to;
                     var $optionStatus = $('<option>');
                     $optionStatus.attr('value', statuses);
