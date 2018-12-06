@@ -47,7 +47,7 @@ jQuery.noConflict();
         }, function(error) {
             // Error
             console.log(error);
-            alert('There was an error retrieving the Datetime field information. Please try activating your App if it is not activated yet.');
+            alert('There was an error retrieving the Datetime field information.');
         });
     };
 
@@ -67,13 +67,13 @@ jQuery.noConflict();
                 $status.val(config.select_status); 
             } else if (resp.enable === false) {
                 // Redirect to Process Management settings if PM is not enabled  
-                alert('Please enable Process Management and then update the App to use this plug-in.');
+                alert('Please enable Process Management to use this plug-in.');
                 window.location.href = getProcessManagementUrl();
             };
         }, function(error) {
             // Error
             console.log(error);
-            alert('There was an error retrieving the Status information. Please try activating your App if it is not activated yet.');
+            alert('There was an error retrieving the Status information.');
         });
     };
 
@@ -81,8 +81,13 @@ jQuery.noConflict();
     setDatetimeDropdown();
     setStatusDropdown();
 
-    // Set input values when form is submitted
-    $form.on('submit', function(e) {
+    // Go back a page when cancel button is clicked
+    $('#settings-cancel').click(function() {
+        history.back();
+    });
+
+    // Set input values when save button is clicked
+    $('#settings-save').click(function(e) {
         e.preventDefault();
         kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
             // Redirect to App Settings
@@ -90,9 +95,4 @@ jQuery.noConflict();
             window.location.href = getSettingsUrl();
         });
     });
-    
-    // Set process to run when cancel button is clicked
-    $('#settings-cancel').on('click', function() {
-        history.back();
-    }
 })(jQuery, kintone.$PLUGIN_ID);
