@@ -7,7 +7,6 @@ jQuery.noConflict();
     var config = kintone.plugin.app.getConfig(PLUGIN_ID);
     var $datetime = $('#select_datetime_field'); // Drop-down with ID 'select_datetime_field'
     var $status = $('#select_status'); // Drop-down with ID 'select_status'
-    var $form = $('.js-submit-settings'); // Form with class 'js-submit-settings'
     var appId = kintone.app.getId(); // Variable with the App ID
 
     // Retrieve URL to App Settings page
@@ -42,7 +41,13 @@ jQuery.noConflict();
                     $datetime.append($optionDatetime);
                 };
             };
-            $datetime.val(config.select_datetime_field); 
+            
+            if (!config.select_datetime_field) {
+                $datetime.val(config.select_datetime_field);
+            };
+
+            $datetime.val(config.select_datetime_field);
+            
         }, function(error) {
             // Error
             console.log(error);
@@ -62,7 +67,13 @@ jQuery.noConflict();
                     $optionStatus.text(statuses);
                     $status.append($optionStatus);
                 };
-                $status.val(config.select_status); 
+                
+                if (!config.select_status) {
+                    $status.val(config.select_status);
+                };
+
+                $status.val(config.select_status);
+                
             } else if (resp.enable === false) {
                 // Redirect to Process Management settings if PM is not enabled  
                 alert('Please enable Process Management to use this plug-in.');
