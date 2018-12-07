@@ -42,11 +42,9 @@ jQuery.noConflict();
                 };
             };
             
-            if (!config.select_datetime_field) {
+            if (config.select_datetime_field) {
                 $datetime.val(config.select_datetime_field);
             };
-
-            $datetime.val(config.select_datetime_field);
             
         }, function(error) {
             // Error
@@ -68,11 +66,9 @@ jQuery.noConflict();
                     $status.append($optionStatus);
                 };
                 
-                if (!config.select_status) {
+                if (config.select_status) {
                     $status.val(config.select_status);
                 };
-
-                $status.val(config.select_status);
                 
             } else if (resp.enable === false) {
                 // Redirect to Process Management settings if PM is not enabled  
