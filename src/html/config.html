@@ -1,12 +1,14 @@
 <section class="settings">
-  <h2 class="settings-heading">Settings for Process Management Timestamp Plug-in</h2>
+  <h2 class="settings-heading">Settings for Status Timestamp Plug-in</h2>
   <p class="kintoneplugin-desc">This plug-in inserts the datetime that a record reached a specified Status into a Datetime field.</p>
-  <form class="js-submit-settings">
     <!-- Datetime field settings -->
     <p class="kintoneplugin-row">
       <label for="datetime" class="kintoneplugin-label">
-        Select a datetime field to show the timestamp in:
+        Datetime Field:
       </label>
+    </p>
+    <p class="kintoneplugin-row">
+        Select a datetime field to show the timestamp in.
     </p>
     <p>
       <div class="kintoneplugin-select-outer">
@@ -20,8 +22,11 @@
     <!-- Status settings -->
     <p class="kintoneplugin-row">
       <label for="status" class="kintoneplugin-label">
-        Select a status to record the timestamp of:
+        Status:
       </label>
+    </p>
+    <p class="kintoneplugin-row">
+        Select a status to record the timestamp of.
     </p>
     <p>
       <div class="kintoneplugin-select-outer">
@@ -37,5 +42,4 @@
         <button type="button" id="settings-cancel" class="kintoneplugin-button-dialog-cancel">Cancel</button>
         <button type="submit" id="settings-save" class="kintoneplugin-button-dialog-ok">Save</button>
     </p>
-  </form>
 </section>
