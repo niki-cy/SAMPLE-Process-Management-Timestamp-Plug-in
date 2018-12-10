@@ -1,1 +1,1 @@
-# SAMPLE-Process-Management-Timestamp-Plug-in
+# SAMPLE-Status-Timestamp-Plug-in
