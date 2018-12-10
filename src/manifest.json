@@ -29,7 +29,7 @@
     ]
   },
   "name": {
-    "en": "Process Management Timestamp Plug-in"
+    "en": "Status Timestamp Plug-in"
   },
   "description": {
     "en": "This plug-in inserts the date and time that a record reached a specified Status into a Datetime field."
