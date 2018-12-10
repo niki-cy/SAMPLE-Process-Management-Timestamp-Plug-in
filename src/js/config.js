@@ -96,7 +96,7 @@ jQuery.noConflict();
         e.preventDefault();
         kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
             // Redirect to App Settings
-            alert('Please update the app!');
+            alert('Plug-in settings have been saved. Please update the app!');
             window.location.href = getSettingsUrl();
         });
     });
