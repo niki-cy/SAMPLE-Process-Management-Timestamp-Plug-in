@@ -70,7 +70,7 @@ jQuery.noConflict();
                     $status.val(config.select_status);
                 };
                 
-            } else if (resp.enable === false) {
+            } else {
                 // Redirect to Process Management settings if PM is not enabled  
                 alert('Please enable Process Management to use this plug-in.');
                 window.location.href = getProcessManagementUrl();
