@@ -30,14 +30,16 @@ jQuery.noConflict();
         return kintone.api(kintone.api.url('/k/v1/preview/app/form/fields', true), 'GET', body, function(resp) {
         // Success
             var props = resp.properties;
+            console.log(props);
+
 
             for (var datetimeField in props) {
                 var field = props[datetimeField];
 
                 if (field.type === 'DATETIME') {
                     var $optionDatetime = $('<option>');
-                    $optionDatetime.attr('value', field.code);
-                    $optionDatetime.text(field.code);
+                    $optionDatetime.attr('value', field.label);
+                    $optionDatetime.text(field.label);
                     $datetime.append($optionDatetime);
                 };
             };
