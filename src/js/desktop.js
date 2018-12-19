@@ -19,11 +19,7 @@
         var status = event.nextStatus.value;
         var datetimeFieldSetting = record[TIMESTAMP_FIELD];
 
-        /* Give alert errors if the status or datetime field has not been set in the plug-in settings. 
-        If set, insert current datetime into timestamp datetime field if status matches that defined in the settings.*/
-        if (STATUS_NAME === '-----') {
-            alert('Status Timestamp Plug-in Warning:\nThe status is not defined in the plug-in settings.')
-        } else if (status === STATUS_NAME && !datetimeFieldSetting || status === STATUS_NAME && datetimeFieldSetting === '-----' ) {
+        if (!TIMESTAMP_FIELD) {
             alert('Status Timestamp Plug-in Warning:\nThe datetime field is not defined in the plug-in settings.');
         } else if (status === STATUS_NAME) {
             datetimeFieldSetting['value'] = timestamp;
