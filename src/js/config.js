@@ -94,10 +94,16 @@ jQuery.noConflict();
     // Set input values when save button is clicked
     $('#settings-save').click(function(e) {
         e.preventDefault();
-        kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
-            // Redirect to App Settings
-            alert('Plug-in settings have been saved. Please update the app!');
-            window.location.href = getSettingsUrl();
-        });
+
+        if ($datetime.val() === '-----' || $status.val() === '-----') {
+            alert('Please set the required fields');
+            return
+        } else {
+            kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
+                // Redirect to App Settings
+                alert('Plug-in settings have been saved. Please update the app!');
+                window.location.href = getSettingsUrl();
+            });
+        };
     });
 })(jQuery, kintone.$PLUGIN_ID);
