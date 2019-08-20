@@ -3,102 +3,97 @@ jQuery.noConflict();
   'use strict';
 
   // Get configuration settings
-  var config = kintone.plugin.app.getConfig(PLUGIN_ID);
-  var $datetime = $('#select_datetime_field'); // Drop-down with ID 'select_datetime_field'
-  var $status = $('#select_status'); // Drop-down with ID 'select_status'
-  var appId = kintone.app.getId(); // Variable with the App ID
-
-  // Set body for API requests
-  var body = {
+  var CONF = kintone.plugin.app.getConfig(PLUGIN_ID);
+  var $form = $('.js-submit-settings');
+  var $cancelButton = $('.js-cancel-button');
+  var $date = $('select[name="js-select-date-field"]');
+  var $status = $('select[name="js-select-status"]');
+  var appId = kintone.app.getId();
+  var statusGetBody = {
     'app': appId
   };
 
-  // Retrieve URL to App Settings page
-  function getSettingsUrl() {
-    return '/k/admin/app/flow?app=' + appId;
-  }
-  // Retrieve URL to Process Management Settings page
-  function getProcessManagementUrl() {
-    return '/k/admin/app/status?app=' + appId;
-  }
-
-  // Retrieve Datetime field information, then set drop-down
-  function setDatetimeDropdown() {
-    return kintone.api(kintone.api.url('/k/v1/preview/app/form/fields', true), 'GET', body, function(resp) {
-      var field;
-      var datetimeField;
-      var $optionDatetime;
-      // Success
-      var props = resp.properties;
-      for (datetimeField in props) {
-        if (props.hasOwnProperty(datetimeField)) {
-          field = props[datetimeField];
-          if (field.type === 'DATETIME') {
-            $optionDatetime = $('<option>');
-            $optionDatetime.attr('value', field.code);
-            $optionDatetime.text(field.label);
-            $datetime.append($optionDatetime);
-          }
+  // Retrieve Date field information, then set drop-down
+  function setDateDropDown() {
+    return KintoneConfigHelper.getFields(['DATETIME', 'DATE']).then(function(resp) {
+      var $dateDropDown = $date;
+      resp.forEach(function(respField) {
+        var $option = $('<option></option>');
+        switch (respField.type) {
+          case 'DATE':
+            $option.attr('value', respField.code + ',' + 'DATE');
+            $option.text(respField.label);
+            $dateDropDown.append($option.clone());
+            break;
+          case 'DATETIME':
+            $option.attr('value', respField.code + ',' + 'DATETIME');
+            $option.text(respField.label);
+            $dateDropDown.append($option.clone());
+            break;
+          default:
+            break;
         }
+      });
+      if (CONF.date) {
+        $dateDropDown.val(CONF.date + ',' + CONF.fieldType);
       }
-      if (config.select_datetime_field) {
-        $datetime.val(config.select_datetime_field);
-      }
-    }, function(error) {
-      // Error
-      alert('There was an error retrieving the Datetime field information.');
+    }, function() {
+      alert('There was an error retrieving the Date field information.');
     });
   }
 
   // Retrieve Status information, then set drop-down
-  function setStatusDropdown() {
-    return kintone.api(kintone.api.url('/k/v1/preview/app/status', true), 'GET', body, function(resp) {
-      var i;
-      var statuses;
-      var $optionStatus;
-      // Success
-      if (resp.enable === true) {
-        for (i = 0; i < resp.actions.length; i++) {
-          statuses = resp.actions[i].to;
-          $optionStatus = $('<option>');
-          $optionStatus.attr('value', statuses);
-          $optionStatus.text(statuses);
-          $status.append($optionStatus);
-        }
-        if (config.select_status) {
-          $status.val(config.select_status);
+  function setStatusDropDown() {
+    return kintone.api(kintone.api.url('/k/v1/preview/app/status', true), 'GET', statusGetBody, function(resp) {
+      var $statusDropDown = $status;
+
+      if (resp.enable) {
+        resp.actions.forEach(function(respStatus) {
+          var status = respStatus.to;
+          var $option = $('<option></option>');
+          $option.attr('value', status);
+          $option.text(status);
+          $statusDropDown.append($option.clone());
+        });
+
+        if (CONF.status) {
+          $status.val(CONF.status);
         }
       } else {
-        // Redirect to Process Management settings if PM is not enabled
         alert('Please enable Process Management to use this plug-in.');
-        window.location.href = getProcessManagementUrl();
+        window.location.href = '/k/admin/app/status?app=' + appId;
       }
-    }, function(error) {
+    }, function() {
       // Error
       alert('There was an error retrieving the Status information.');
     });
   }
 
-  // Run drop-down functions
-  setDatetimeDropdown();
-  setStatusDropdown();
+  $(document).ready(function() {
+    // Run drop-down functions
+    setDateDropDown();
+    setStatusDropDown();
 
-  // Go back a page when cancel button is clicked
-  $('#settings-cancel').click(function() {
-    history.back();
-  });
-  // Set input values when save button is clicked
-  $('#settings-save').click(function(e) {
-    e.preventDefault();
-    // Check required fields
-    if ($datetime.val() === '-----' || $status.val() === '-----') {
-      alert('Please set the required fields');
-    } else {
-      kintone.plugin.app.setConfig({select_datetime_field: $datetime.val(), select_status: $status.val()}, function() {
+    // Set input values when save button is clicked
+    $form.on('submit', function(e) {
+      var config = [];
+      var date = $date.val();
+
+      config.date = date.split(',')[0]; // Set date or datetime field code
+      config.fieldType = date.split(',')[1]; // Set date or datetime field type
+      config.status = $status.val(); // Set status value
+
+      e.preventDefault();
+
+      kintone.plugin.app.setConfig(config, function() {
         // Redirect to App Settings
-        alert('Plug-in settings have been saved. Please update the app!');
-        window.location.href = getSettingsUrl();
+        alert('The plug-in settings have been saved. Please update the app!');
+        window.location.href = '/k/admin/app/flow?app=' + appId;
       });
-    }
+    });
+    // Go back a page when cancel button is clicked
+    $cancelButton.on('click', function() {
+      window.location.href = '/k/admin/app/' + appId + '/plugin/';
+    });
   });
 })(jQuery, kintone.$PLUGIN_ID);
