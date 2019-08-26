@@ -21,12 +21,12 @@ jQuery.noConflict();
         var $option = $('<option></option>');
         switch (respField.type) {
           case 'DATE':
-            $option.attr('value', respField.code + ',' + 'DATE');
+            $option.attr('value', respField.code + ',DATE');
             $option.text(respField.label);
             $dateDropDown.append($option.clone());
             break;
           case 'DATETIME':
-            $option.attr('value', respField.code + ',' + 'DATETIME');
+            $option.attr('value', respField.code + ',DATETIME');
             $option.text(respField.label);
             $dateDropDown.append($option.clone());
             break;
@@ -48,12 +48,16 @@ jQuery.noConflict();
       var $statusDropDown = $status;
 
       if (resp.enable) {
+        var statuses = [];
         resp.actions.forEach(function(respStatus) {
           var status = respStatus.to;
           var $option = $('<option></option>');
-          $option.attr('value', status);
-          $option.text(status);
-          $statusDropDown.append($option.clone());
+          if (!statuses.includes(status)) {
+            statuses.push(status);
+            $option.attr('value', status);
+            $option.text(status);
+            $statusDropDown.append($option.clone());
+          }
         });
 
         if (CONF.status) {
